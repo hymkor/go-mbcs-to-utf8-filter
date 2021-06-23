@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	mbcs "github.com/zetamatta/go-mbcs-to-utf8-sample"
+	mbcs "github.com/zetamatta/go-mbcs-to-utf8-filter"
 )
 
 func main() {

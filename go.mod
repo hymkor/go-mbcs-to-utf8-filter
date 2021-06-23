@@ -1,4 +1,4 @@
-module github.com/zetamatta/go-mbcs-to-utf8-sample
+module github.com/zetamatta/go-mbcs-to-utf8-filter
 
 go 1.16
 
