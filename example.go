@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 
 	"mbcs"
@@ -11,6 +12,10 @@ import (
 func main() {
 	filter := mbcs.NewFilter(os.Stdin)
 	for filter.Scan() {
-		println(filter.Text())
+		fmt.Println(filter.Text())
+	}
+	if err := filter.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
 	}
 }

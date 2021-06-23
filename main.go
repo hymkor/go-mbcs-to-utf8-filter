@@ -30,7 +30,7 @@ func ansiToUtf8(mbcs []byte) (string, error) {
 }
 
 type Filter struct {
-	*bufio.Scanner
+	sc   *bufio.Scanner
 	text string
 	ansi bool
 	err  error
@@ -38,28 +38,31 @@ type Filter struct {
 
 func NewFilter(r io.Reader) *Filter {
 	return &Filter{
-		Scanner: bufio.NewScanner(r),
+		sc: bufio.NewScanner(r),
 	}
 }
 
-func (sc *Filter) Text() string {
-	return sc.text
-}
-
-func (sc *Filter) Scan() bool {
-	if !sc.Scanner.Scan() {
-		sc.err = sc.Scanner.Err()
+func (f *Filter) Scan() bool {
+	if !f.sc.Scan() {
+		f.err = f.sc.Err()
 		return false
 	}
-	line := sc.Bytes()
-	if !sc.ansi && utf8.Valid(line) {
-		sc.text = sc.Scanner.Text()
+	line := f.sc.Bytes()
+	if !f.ansi && utf8.Valid(line) {
+		f.text = f.sc.Text()
 	} else {
-		sc.text, sc.err = ansiToUtf8(line)
-		if sc.err != nil {
+		f.text, f.err = ansiToUtf8(line)
+		if f.err != nil {
 			return false
 		}
-		sc.ansi = true
+		f.ansi = true
 	}
 	return true
+}
+func (f *Filter) Text() string {
+	return f.text
+}
+
+func (f *Filter) Err() error {
+	return f.err
 }
